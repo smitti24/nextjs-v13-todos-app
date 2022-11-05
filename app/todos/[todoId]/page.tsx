@@ -1,5 +1,8 @@
 import React from 'react'
 import { Todo } from '../../../typings'
+import { notFound } from "next/navigation";
+
+export const dynamicParams = true;
 
 type PageProps = {
     params: {
@@ -17,6 +20,7 @@ const fetchTodo = async (todoId: string) => {
 async function TodoPage({params: {todoId}}: PageProps) {
     const todo = await fetchTodo(todoId);
 
+    if(!todo.id) return notFound();
 
   return (
     <div className='p-10 bg-yellow-200 border-2 m-2 shadow-lg'>
@@ -40,6 +44,7 @@ export async function generateStaticParams() {
     const res = await fetch("https://jsonplaceholder.typicode.com/todos/"); // Returns [] of todo objects
     const todos: Todo[] = await res.json();
 
+    // We will only prebuild the first 10 pages, we dont want to get rate limited.
     const trimmedTodos = todos.splice(0, 10);
     
     // [{ todoId: '1'}, { todoId: '2'}]

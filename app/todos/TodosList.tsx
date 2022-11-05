@@ -10,8 +10,6 @@ const fetchTodos = async () => {
 
 async function TodosList() {
     const todos = await fetchTodos();
-
-    console.log(todos)
   return (
     <div>
         {todos.map((todo: Todo) => (
